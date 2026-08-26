@@ -57,21 +57,17 @@ class UserController extends Controller
                 'message' => 'Aucun utilisateur enregistré avec cet email.',
             ], 404);
 
-        }
-        if ($user && !Hash::check($request->password, $user->password)) {
+        } else if ($user && !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'Mot de passe incorrect.',
             ], 401);
-        }
-
-        if ($user->statut === 'bloque') {
+        } else if (Hash::check($request->password, $user->password) && $user->statut === 'bloque') {
 
             return response()->json([
                 'message' => 'Votre compte est bloqué.',
                 'data' => $user,
             ], 403);
-        }
-        if ($user && Hash::check($request->password, $user->password) && $user->statut !== 'bloque') {
+        } else if ($user && Hash::check($request->password, $user->password) && $user->statut !== 'bloque') {
 
             $accessToken = $user->createToken('authToken')->accessToken;
             $refreshToken = $user->createToken('refreshToken')->accessToken;
