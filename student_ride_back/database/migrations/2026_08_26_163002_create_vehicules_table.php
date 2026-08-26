@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('marque');
             $table->enum('type_vehicule', ['voiture', 'moto']);
             $table->string('immatriculation')->unique();
+            $table->string('media')->nullable();
             $table->timestamps();
         });
     }
