@@ -18,28 +18,19 @@
 
                 <p class="menu-title">MENU PRINCIPAL</p>
 
-                <RouterLink
-                    to="/driver/dashboard"
-                    class="nav-link"
-                >
+                <RouterLink to="/driver/dashboard" class="nav-link">
                     <span>▦</span>
                     Dashboard
                 </RouterLink>
 
 
-                <RouterLink
-                    to="/driver/trajets"
-                    class="nav-link"
-                >
+                <RouterLink to="/driver/trajets" class="nav-link">
                     <span>🚗</span>
                     Mes trajets
                 </RouterLink>
 
 
-                <RouterLink
-                    to="/driver/trajets/create"
-                    class="nav-link"
-                >
+                <RouterLink to="/driver/trajets/create" class="nav-link">
                     <span>＋</span>
                     Créer un trajet
                 </RouterLink>
@@ -47,10 +38,7 @@
 
                 <p class="menu-title">MON COMPTE</p>
 
-                <RouterLink
-                    to="/driver/profile"
-                    class="nav-link"
-                >
+                <RouterLink to="/driver/profile" class="nav-link">
                     <span>◯</span>
                     Mon profil
                 </RouterLink>
@@ -67,14 +55,18 @@
                     </div>
 
                     <div>
-                        <strong>Aubin</strong>
+                        <strong>{{ user.name }}</strong>
                         <span>Chauffeur</span>
                     </div>
 
                 </div>
 
 
-                <button class="logout">
+                <button class="switch-role" @click="switchToPassenger">
+                    👤 Mode passager
+                </button>
+
+                <button class="logout" @click="logout">
                     ↪ Déconnexion
                 </button>
 
@@ -107,7 +99,7 @@
                         </div>
 
                         <div>
-                            <strong>Aubin</strong>
+                            <strong>{{ user.name }}</strong>
                             <small>Chauffeur</small>
                         </div>
 
@@ -132,13 +124,39 @@
 
 
 <script setup>
-// Pour le moment aucune logique.
-// Les données seront connectées à Laravel plus tard.
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const user = ref(
+    JSON.parse(localStorage.getItem('user')) || {
+        name: 'Chauffeur',
+        role: 'driver'
+    }
+)
+
+const switchToPassenger = () => {
+    const updatedUser = {
+        ...user.value,
+        role: 'passenger'
+    }
+
+    localStorage.setItem('user', JSON.stringify(updatedUser))
+
+    router.push('/passenger/dashboard')
+}
+
+const logout = () => {
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+
+    router.push('/login')
+}
 </script>
 
 
 <style scoped>
-
 * {
     box-sizing: border-box;
 }
@@ -206,6 +224,27 @@
     font-size: 14px;
 }
 
+.switch-role {
+    width: 100%;
+    margin-top: 8px;
+    padding: 9px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    text-align: left;
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+.switch-role:hover {
+    background: #dbeafe;
+}
+
 .logo span {
     display: block;
     margin-top: 2px;
@@ -271,9 +310,7 @@ nav {
 }
 
 
-/* =========================
-   SIDEBAR BOTTOM
-========================= */
+
 
 .sidebar-bottom {
     padding-top: 15px;
@@ -346,9 +383,7 @@ nav {
 }
 
 
-/* =========================
-   MAIN
-========================= */
+
 
 .main {
     width: calc(100% - 245px);
@@ -496,5 +531,4 @@ nav {
     }
 
 }
-
 </style>

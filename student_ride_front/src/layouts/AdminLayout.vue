@@ -64,7 +64,7 @@
 
                 </div>
 
-                <button class="logout">
+                <button class="logout" @click="logout">
                     ↪ Déconnexion
                 </button>
 
@@ -108,7 +108,6 @@
             </header>
 
 
-            <!-- CONTENT -->
             <main class="content">
 
                 <RouterView />
@@ -122,11 +121,19 @@
 
 
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const logout = () => {
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+
+    router.push('/login')
+}
 </script>
 
-
 <style scoped>
-
 * {
     box-sizing: border-box;
 }
@@ -457,5 +464,4 @@ nav {
         padding: 20px;
     }
 }
-
 </style>

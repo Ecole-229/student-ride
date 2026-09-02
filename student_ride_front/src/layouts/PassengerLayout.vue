@@ -8,10 +8,7 @@
         <div class="main-content">
 
             <!-- Navbar -->
-            <Navbar
-                title="Student-Ride"
-                subtitle="Votre espace étudiant"
-            />
+            <Navbar title="Student-Ride" subtitle="Votre espace étudiant" />
 
             <!-- Page actuelle -->
             <main class="page-content">

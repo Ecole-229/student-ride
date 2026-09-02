@@ -5,17 +5,48 @@ const router = createRouter({
 
     routes: [
 
+        //authentification
+
+        {
+            path: "/login",
+            name: "login",
+            component: () => import("../views/auth/Login.vue"),
+        },
+
+        {
+            path: "/register",
+            name: "register",
+            component: () => import("../views/auth/Register.vue"),
+        },
+
+        {
+            path: "/become-driver",
+            name: "become-driver",
+            component: () => import("../views/auth/BecomeDriver.vue"),
+            meta: {
+                requiresAuth: true,
+                role: "passenger",
+            },
+        },
+
+        //login
 
         {
             path: "/",
-            redirect: "/passenger/dashboard",
+            redirect: "/login",
         },
 
 
+        //passsager
 
         {
             path: "/passenger",
             component: () => import("../layouts/PassengerLayout.vue"),
+
+            meta: {
+                requiresAuth: true,
+                role: "passenger",
+            },
 
             children: [
 
@@ -71,13 +102,16 @@ const router = createRouter({
         },
 
 
-        // =========================
-        // CHAUFFEUR
-        // =========================
+        //chauffeur
 
         {
             path: "/driver",
             component: () => import("../layouts/DriverLayout.vue"),
+
+            meta: {
+                requiresAuth: true,
+                role: "driver",
+            },
 
             children: [
 
@@ -133,9 +167,16 @@ const router = createRouter({
         },
 
 
+        //admin
+
         {
             path: "/admin",
             component: () => import("../layouts/AdminLayout.vue"),
+
+            meta: {
+                requiresAuth: true,
+                role: "admin",
+            },
 
             children: [
 
@@ -186,5 +227,87 @@ const router = createRouter({
 
     ],
 });
+
+
+//route
+
+router.beforeEach((to, from, next) => {
+
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+
+    let user = null;
+
+    if (userData) {
+        try {
+            user = JSON.parse(userData);
+        } catch (error) {
+            console.error("Utilisateur invalide :", error);
+            localStorage.removeItem("user");
+        }
+    }
+
+
+
+    if (to.meta.requiresAuth) {
+
+
+        if (!token || !user) {
+            return next({
+                name: "login",
+            });
+        }
+
+
+        if (to.meta.role && user.role !== to.meta.role) {
+
+            if (user.role === "admin") {
+                return next({
+                    name: "admin.dashboard",
+                });
+            }
+
+            if (user.role === "driver") {
+                return next({
+                    name: "driver.dashboard",
+                });
+            }
+
+            return next({
+                name: "passenger.dashboard",
+            });
+        }
+    }
+
+
+
+
+    if (
+        (to.name === "login" || to.name === "register") &&
+        token &&
+        user
+    ) {
+
+        if (user.role === "admin") {
+            return next({
+                name: "admin.dashboard",
+            });
+        }
+
+        if (user.role === "driver") {
+            return next({
+                name: "driver.dashboard",
+            });
+        }
+
+        return next({
+            name: "passenger.dashboard",
+        });
+    }
+
+
+    next();
+});
+
 
 export default router;
