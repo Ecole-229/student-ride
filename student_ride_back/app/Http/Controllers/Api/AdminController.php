@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-     public function confirmerConducteur($id)
+    public function confirmerConducteur($id)
     {
         $conducteur = Conducteur::find($id);
         if (!$conducteur) {
@@ -17,8 +17,9 @@ class AdminController extends Controller
             ], 404);
         }
 
-        $conducteur->update(['confirmee' => 'confirmee']);
-
+        $conducteur->update(['status' => 'confirmee']);
+        $conducteur->user()->assignRole('conducteur');
+        $conducteur->user()->removeRole('passager');
         return response()->json([
             'message' => 'Conducteur confirmé avec succès.',
             'conducteur' => $conducteur

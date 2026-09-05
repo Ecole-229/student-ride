@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Conducteur extends Model
 {
      protected $guarded = [];
+     protected $appends = ['role'];
 
     public function user()
     {

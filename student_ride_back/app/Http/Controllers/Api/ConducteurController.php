@@ -33,7 +33,9 @@ class ConducteurController extends Controller
             ], 404);
         }
 
-        $conducteur->update(['confirmee' => 'confirmee']);
+        $conducteur->update(['status' => 'confirmee']);
+        $conducteur->user()->assignRole('conducteur');
+        $conducteur->user()->removeRole('passager');
 
         return response()->json([
             'message' => 'Conducteur confirmé avec succès.',
@@ -54,7 +56,7 @@ class ConducteurController extends Controller
         }
         $conducteur = Conducteur::create([
             'user_id' => $request->user_id,
-            'confirmee' => 'non_confirmee'
+            'status' => 'non_confirmee'
         ]);
       $vehiculeController = new VehiculeController();
       $vehiculeController->store($request);

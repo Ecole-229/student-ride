@@ -23,7 +23,7 @@ class User extends Authenticatable implements OAuthenticatable
     protected $fillable = [
         'nom', 'prenom', 'email', 'password', 'telephone', 'statut',
     ];
-
+protected $appends = ['role'];
     protected $hidden = ['password'];
      public function conducteur()
     {

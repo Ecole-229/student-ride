@@ -79,7 +79,6 @@ class ReservationController extends Controller
         });
     }
 
-    // Le conducteur confirme une réservation en_attente
     public function confirmer(Reservation $reservation)
     {
         $conducteur = Auth::user()->conducteur;

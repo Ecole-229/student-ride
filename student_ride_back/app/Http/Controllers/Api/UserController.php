@@ -7,11 +7,19 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     public function register(Request $request)
     {
+
+    if(!Role::where('name', 'conducteur')->exists()) {
+
+        Role::create(['name' => 'conducteur']);
+    }
+    if(!Role::where('name', 'passager')->exists()) {
+       Role::create(['name' => 'passager']);
+    }
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -32,6 +40,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
         ]);
+        $user->assignRole('passager');
         return response()->json([
             'message' => 'Inscription réussie.',
             'data' => $user,

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Passager extends Model
 {
     protected $fillable = ['user_id'];
+    protected $appends = ['role'];
 
     public function user()
     {
