@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('trajet_id')->constrained()->cascadeOnDelete();
             $table->foreignId('passager_id')->constrained()->cascadeOnDelete();
             $table->unsignedTinyInteger('nombre_places_reservees')->default(1);
-            $table->enum('statut', ['confirmee', 'annulee'])->default('confirmee');
+            $table->enum('statut', ['en_attente', 'confirmee', 'refusee', 'annulee'])->default('en_attente');
             $table->timestamps();
         });
     }

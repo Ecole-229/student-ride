@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('trajet_id')->constrained()->cascadeOnDelete();
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->timestamps();
+            $table->timestamp('horodatage')->useCurrent();
         });
     }
 

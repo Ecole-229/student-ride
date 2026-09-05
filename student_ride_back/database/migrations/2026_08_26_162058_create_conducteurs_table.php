@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
             $table->float('note_moyenne')->default(0);
+            $table->status('confirmee', 'non_confirmee')->default('non_confirmee');
             $table->timestamps();
         });
     }
