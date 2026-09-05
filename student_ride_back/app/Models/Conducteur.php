@@ -28,4 +28,8 @@ class Conducteur extends Model
     {
         return $this->hasMany(Evaluation::class);
     }
+      public function getRoleAttribute()
+    {
+        return $this->getRoleNames()->first();
+    }
 }

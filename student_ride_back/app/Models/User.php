@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -47,5 +46,10 @@ protected $appends = ['role'];
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+      public function getRoleAttribute()
+    {
+        return $this->getRoleNames()->first();
     }
 }
